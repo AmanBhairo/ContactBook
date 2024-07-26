@@ -1,0 +1,225 @@
+﻿@model AddContactViewModel
+
+<h1>Add New Contact</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-container">
+        <div class="form-group">
+            <label asp-for="CountryId" class="control-label">Country:</label>
+            <select id="countryDropdown" asp-for="CountryId" class="form-control custom-select"
+                    asp-items="@(new SelectList(Model.countries, nameof(CountryViewModel.CountryId), nameof(CountryViewModel.CountryName)))">
+                <option value="">--Select Country--</option>
+            </select>
+            <span asp-validation-for="CountryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="StateId" class="control-label">State:</label>
+            <select id="stateDropdown" asp-for="StateId" class="form-control custom-select">
+                <option value="">--Select State--</option>
+                @foreach (var state in Model.states)
+                {
+                    <option value="@state.StateId" data-category="@state.CountryId">@state.StateName</option>
+                }
+            </select>
+            <span asp-validation-for="StateId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label">First Name:</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="LastName" class="control-label">Last Name:</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ContactNumber" class="control-label">Contact Number:</label>
+            <input asp-for="ContactNumber" class="form-control" />
+            <span asp-validation-for="ContactNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Favourite" class="control-label">Favourite:</label>
+            <div class="form-check-inline">
+                <input asp-for="Favourite" type="checkbox" class="form-check-input" />
+                <label class="form-check-label">Yes</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Gender:</label><br />
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Gender" value="M" />
+                <label class="form-check-label">Male</label>
+            </div>
+            <div class="form-check-inline">
+                <input class="form-check-input" type="radio" asp-for="Gender" value="F" />
+                <label class="form-check-label">Female</label>
+            </div>
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address" class="control-label">Address:</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email:</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ContactDescription" class="control-label">Description:</label>
+            <textarea asp-for="ContactDescription" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-group file-input-container">
+            <label asp-for="File" class="control-label">Profile Picture:</label>
+            <div class="custom-file">
+                <input asp-for="File" type="file" class="custom-file-input" id="fileInput">
+                <label class="custom-file-label" for="fileInput">Choose file</label>
+            </div>
+            <img src="" alt="" id="imagePreview" class="img-fluid" />
+            <button class="btn btn-sm btn-danger" id="removeImage">
+                <i class="fa fa-times"></i> Remove
+            </button>
+            <span class="text-danger file-validation-error"></span>
+        </div>
+
+        <div class="form-col">
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label">BirthDate</label>
+                <input asp-for="BirthDate" type="date" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a asp-action="PaginatedIndex" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initially hide all state options
+            $('#stateDropdown option').hide();
+
+            // Show state options corresponding to the initially selected country
+            var initialCountry = $('#countryDropdown').val();
+            $('#stateDropdown option[data-category="' + initialCountry + '"]').show();
+
+            // Handle country change event
+            $('#countryDropdown').change(function () {
+                var countryId = $(this).val();
+                $('#stateDropdown option').hide();
+                $('#stateDropdown option[data-category="' + countryId + '"]').show();
+                $('#stateDropdown').val('');
+            });
+
+            // Client-side file type validation and preview
+            $('form').submit(function (event) {
+                var fileInput = document.getElementById('fileInput');
+                var file = fileInput.files[0];
+                if (file) {
+                    var fileExtension = file.name.split('.').pop().toLowerCase();
+                    var allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    if (allowedExtensions.indexOf(fileExtension) === -1) {
+                        event.preventDefault();
+                        $('.file-validation-error').text('Only .jpg, .jpeg, and .png files are allowed.');
+                    }
+                }
+            });
+
+            // Preview image on file input change
+            $('#fileInput').change(function (e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').attr('src', e.target.result).show();
+                        $('#removeImage').show();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Remove image preview
+            $('#removeImage').click(function (e) {
+                e.preventDefault();
+                $('#imagePreview').attr('src', '').hide();
+                $('#fileInput').val('');
+                $('#removeImage').hide();
+            });
+        });
+    </script>
+}
+
+<style>
+    /* Custom styles for the form */
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .form-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-check-inline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .file-input-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .custom-file-label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    #imagePreview {
+        max-width: 200px;
+        max-height: 200px;
+        display: none;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    #removeImage {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .btn-secondary {
+        margin-left: 10px;
+    }
+
+</style>

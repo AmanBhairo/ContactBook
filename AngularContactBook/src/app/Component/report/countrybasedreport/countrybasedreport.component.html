@@ -1,0 +1,46 @@
+<div class="container">
+    <h2 class="text-center">Country Based Report</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label" for="countryId">Country Name:</label>
+                <select id="countryId" name="countryId" class="form-control" [(ngModel)]="countryId" (change)="onCountryChange()" required>
+                    <option value="">Select your country</option>
+                    <option *ngFor="let country of countries" [ngValue]="country.countryId">{{country.countryName}}</option>
+                </select>
+                <div *ngIf="countryId==0">
+                    <small class="text-danger">Country is required.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mb-3">
+        <div class="rounded-corner salary-data" *ngIf=" countryId!=0 else noData">
+    
+            <div class="rounded-corner salary-data" >
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Total Count</th>
+                        </tr>
+                    </thead>
+                <tbody class="table-group-divider">
+                    <td *ngIf="stateBasedReport!=0">{{stateBasedReport}}</td>
+                    <td *ngIf="stateBasedReport==0">0</td>
+                </tbody>
+              </table>
+              
+             
+          
+          </div>
+    </div>
+    
+    <ng-template #noData>
+        <div class="rounded-corner no-data">
+          <p>No data available for the selected country.</p>
+        </div>
+      </ng-template>
+</div>
+            

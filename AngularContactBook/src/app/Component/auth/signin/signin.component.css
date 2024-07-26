@@ -1,0 +1,32 @@
+.container {
+    margin-top: 50px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.text-danger {
+    font-size: 0.9rem;
+}
+
+.btn-link {
+    font-size: 0.9rem;
+}
+
+.loader-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

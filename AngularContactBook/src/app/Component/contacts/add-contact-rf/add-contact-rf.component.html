@@ -1,0 +1,132 @@
+<div class="container">
+    <h2 class="text-center">Add Contact Reactive Form</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form [formGroup]="addContactForm" class="needs-validation" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="countryId">Country Name:</label>
+            <select id="countryId" formControlName="countryId" class="form-control" (change)="onCountryChange()" required>
+              <option value="">Select your country</option>
+              <option *ngFor="let country of countries" [value]="country.countryId">{{ country.countryName }}</option>
+            </select>
+            <div *ngIf="addContactForm.get('countryId')?.invalid && addContactForm.get('countryId')?.touched">
+              <small class="text-danger">Country is required.</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="stateId">State Name:</label>
+            <select id="stateId" formControlName="stateId" class="form-control" required>
+              <option value="">Select your state</option>
+              <option *ngFor="let state of states" [value]="state.stateId">{{ state.stateName }}</option>
+            </select>
+            <div *ngIf="addContactForm.get('stateId')?.invalid && addContactForm.get('stateId')?.touched">
+              <small class="text-danger">State is required.</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="firstName">First name:</label>
+            <input type="text" class="form-control" id="firstName" formControlName="firstName">
+            <div *ngIf="formcontrols['firstName'].invalid && formcontrols['firstName'].touched">
+                <small class="text-danger" *ngIf="formcontrols['firstName'].errors?.['required']">
+                    First name is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['firstName'].errors?.['minlength']">
+                    First name must be at least 3 characters long.
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="lastName">Last name:</label>
+            <input type="text" class="form-control" id="lastName" formControlName="lastName">
+            <div *ngIf="formcontrols['lastName'].invalid && formcontrols['lastName'].touched">
+                <small class="text-danger" *ngIf="formcontrols['lastName'].errors?.['required']">
+                    Last name is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['lastName'].errors?.['minlength']">
+                    Last name must be at least 3 characters long.
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="contactNumber">Contact number:</label>
+            <input type="text" class="form-control" id="contactNumber" formControlName="contactNumber">
+            <div *ngIf="formcontrols['contactNumber'].invalid && formcontrols['contactNumber'].touched">
+                <small class="text-danger" *ngIf="formcontrols['contactNumber'].errors?.['required']">
+                    Contact number is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['contactNumber'].errors?.['minlength']">
+                    Contact number should not be less than 10 digits. 
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['contactNumber'].errors?.['maxlength']">
+                    Contact number should not be more than 10 digits. 
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email:</label>
+            <input type="email" class="form-control" id="email" formControlName="email">
+            <div *ngIf="formcontrols['email'].invalid && formcontrols['email'].touched">
+                <small class="text-danger" *ngIf="formcontrols['email'].errors?.['required']">
+                    Email is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['email'].errors?.['email']">
+                    Invalid email format.
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="contactDescription">Contact description:</label>
+            <input type="text" class="form-control" id="contactDescription" formControlName="contactDescription">
+            <div *ngIf="formcontrols['contactDescription'].invalid && formcontrols['contactDescription'].touched">
+                <small class="text-danger" *ngIf="formcontrols['contactDescription']?.errors?.['required']">
+                    Contact description is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['contactDescription']?.errors?.['minlength']">
+                    Contact description must be at least 3 characters long.
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="imageByte">Profile pic:</label>
+            <input type="file" class="form-control" id="imageByte" formControlName="profilePic" (change)="onFileSelected($event)" accept="image/*">
+            <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image" style="max-width: 300px;">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Gender:</label>
+            <div>
+              <input type="radio" id="male" formControlName="gender" value="M">
+              <label class="form-label" for="male">Male</label>
+            </div>
+            <div>
+              <input type="radio" id="female" formControlName="gender" value="F">
+              <label class="form-label" for="female">Female</label>
+            </div>
+            <div *ngIf="addContactForm.get('gender')?.invalid && addContactForm.get('gender')?.touched">
+              <small class="text-danger">Gender is required.</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="address">Address:</label>
+            <input type="text" class="form-control" id="address" formControlName="address">
+            <div *ngIf="formcontrols['address'].invalid && formcontrols['address'].touched">
+                <small class="text-danger" *ngIf="formcontrols['address']?.errors?.['required']">
+                    Address is required.
+                </small>
+                <small class="text-danger" *ngIf="formcontrols['address']?.errors?.['minlength']">
+                    Address must be at least 3 characters long.
+                </small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div>
+              <input type="checkbox" id="favourite" formControlName="favourite">
+              <label class="form-label" for="favourite">Add to Favourite</label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" [disabled]="addContactForm.invalid">Submit</button>
+          <a [routerLink]="['/searchContact']" routerLinkActive="router-link-active">Back to list</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  

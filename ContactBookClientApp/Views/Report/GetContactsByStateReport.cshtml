@@ -1,0 +1,146 @@
+﻿@model List<ContactRecordReportViewModel>;
+@{
+    var countries = ViewBag.Country as List<CountryViewModel>;
+    var states = ViewBag.States as List<StateViewModel>;
+}
+
+<form asp-action="GetContactsByStateReport" method="post">
+    <partial name="_ReportView" />
+    <div class="form-group">
+        <div class="form-group">
+            <label class="control-label">Country:</label>
+            <select id="countryDropdown" name="CountryId" class="form-control custom-select">
+                <option value="">--Select Country--</option>
+                @foreach (var country in countries)
+                {
+                    <option value="@country.CountryId">@country.CountryName</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">State:</label>
+            <select id="stateDropdown" name="StateId" class="form-control custom-select" onchange="submitFormOnChange(this)">
+                <option value="">--Select State--</option>
+                @foreach (var state in states)
+                {
+                    <option value="@state.StateId" data-category="@state.CountryId">@state.StateName</option>
+                }
+            </select>
+
+        </div>
+    </div>
+</form>
+
+@if (Model == null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sr No.</th>
+                <th>Contact Name</th>
+                <th>Contact Number</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>State</th>
+                <th>BirthDate</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="8">No record</td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sr No.</th>
+                <th>Contact Name</th>
+                <th>Contact Number</th>
+                <th>Email</th>
+                <th>Country</th>
+                <th>State</th>
+                <th>BirthDate</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int sr = 0;
+            }
+
+            @foreach (var contact in Model)
+            {
+                sr++;
+                <tr>
+                    <td>@sr</td>
+                    <td>@contact.FirstName @contact.LastName</td>
+                    <td>@contact.ContactNumber</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.CountryName</td>
+                    <td>@contact.StateName</td>
+                    @if(contact.BirthDate != null)
+                    {
+                        <td>@contact.BirthDate</td>
+                    }
+                    else
+                    {
+                        <td>Not Available</td>
+                    }
+                </tr>
+
+
+
+            }
+        </tbody>
+    </table>
+
+}
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function submitFormOnChange(select) {
+            var selectedState = select.value;
+            if (selectedState !== "") {
+                $('#stateErrorMessage').hide();
+                // Ensure the form is submitted with the selected StateId
+                select.closest('form').submit();
+            } else {
+                $('#stateErrorMessage').show();
+            }
+        }
+
+
+        $(document).ready(function () {
+            // Initially hide all state options
+            $('#stateDropdown option').hide();
+
+            // Show state options corresponding to the initially selected country
+            $('#countryDropdown').change(function () {
+                var countryId = $(this).val();
+                $('#stateDropdown option').hide();
+                $('#stateDropdown option[data-category="' + countryId + '"]').show();
+                $('#stateDropdown').val('');
+            });
+
+            var selectedStateId = '@ViewBag.SelectedStateId';
+            if (selectedStateId) {
+                $('#stateDropdown').val(selectedStateId);
+            }
+
+            var selectedCountryId = '@ViewBag.SelectedCountryId';
+            if (selectedCountryId) {
+                $('#countryDropdown').val(selectedCountryId);
+            }
+        });
+    </script>
+}

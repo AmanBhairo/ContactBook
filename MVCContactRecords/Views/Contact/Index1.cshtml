@@ -1,0 +1,113 @@
+﻿@model List<Contact>
+@{
+    // Generate links for each alphabet letter
+    List<char> alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToList();
+}
+<h1>Contacts</h1>
+<form method="get">
+@foreach (char letter in alphabet)
+{
+    <button class="btn btn-outline-primary btn-sm letter-round" type="submit" name="letter" data-letter="@letter" value="@letter">@letter</button>
+}
+
+</form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Contact ID</th>
+                        <th>Contact Name</th>
+                      
+                            <th>Action</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model)
+                    {
+                        <tr>
+                            <td>@contact.ContactId</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@contact.ContactId">@contact.FirstName @contact.LastName</a>
+                            </td>
+                            <td>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", new { id = contact.ContactId })'">Edit</button>
+                                }
+                                <button class="btn btn-default" onclick="location.href='@Url.Action("Details", new { id = contact.ContactId })'">Details</button>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", new { id = contact.ContactId })'">Delete</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+       
+       
+        <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary pull-right" onclick="location.href='@Url.Action("Create")'">Add</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Index")'">Show All Contacts</button>
+                </div>
+        </div>
+   
+<!-- Pagination -->
+<div>
+    <!-- Page size dropdown -->
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" onchange="changePageSize(this)">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <!-- Add more options as needed -->
+    </select>
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                <a class="page-link" href="/Contact/Index1?page=@i&pageSize=@ViewBag.PageSize&letter=@ViewBag.Letter">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<style>
+    .letter {
+        cursor: pointer;
+    }
+    <style>
+    .letter-round {
+        border-radius: 5px;
+        margin: 2px;
+        height: 30px;
+        line-height: 1;
+        padding: 0.2rem 0.4rem;
+    }
+</style>
+</style>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function () {
+        var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+        var pageSizeDropdown = document.getElementById("pageSize");
+        // Set selected option based on current page size
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+    });
+    function changePageSize(select) {
+        var pageSize = select.value;
+        var currentPage = @(ViewBag.CurrentPage);
+        var letter = "@ViewBag.Letter";
+        window.location.href = "/Contact/Index1?page=" + currentPage + "&pageSize=" + pageSize + "&letter=" + letter;
+    }
+</script>

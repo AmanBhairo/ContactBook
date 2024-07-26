@@ -1,0 +1,132 @@
+﻿@model List<Contact>
+@{
+    // Generate links for each alphabet letter
+    List<char> alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToList();
+}
+
+<h1>Contacts</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between">
+                @foreach (char letter in alphabet)
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm letter-round" data-letter="@letter">@letter</button>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" id="all">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Contact ID</th>
+                            <th>Contact Name</th>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <th>Action</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var supplier in Model)
+                        {
+                            <tr>
+                                <td>@supplier.ContactId</td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@supplier.ContactId">@supplier.FirstName @supplier.LastName</a>
+                                </td>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <td>
+                                        <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", new { id = supplier.ContactId })'">Edit</button>
+                                        <button class="btn btn-default" onclick="location.href='@Url.Action("Details", new { id = supplier.ContactId })'">Details</button>
+                                        <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", new { id = supplier.ContactId })'">Delete</button>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @foreach (var letter in alphabet)
+            {
+                <div class="panel panel-default" id="@letter" style="display: none;">
+                    @{
+                        var filteredContacts = Model.Where(s => s.FirstName.StartsWith(letter.ToString())).OrderBy(s => s.FirstName).ToList();
+                    }
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Contact ID</th>
+                                <th>Contact Name</th>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <th>Action</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var supplier in filteredContacts)
+                            {
+                                <tr>
+                                    <td>@supplier.ContactId</td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@supplier.ContactId">@supplier.FirstName @supplier.LastName</a>
+                                    </td>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <td>
+                                            <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", new { id = supplier.ContactId })'">Edit</button>
+                                            <button class="btn btn-default" onclick="location.href='@Url.Action("Details", new { id = supplier.ContactId })'">Details</button>
+                                            <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", new { id = supplier.ContactId })'">Delete</button>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary pull-right" onclick="location.href='@Url.Action("Create")'">Add</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary" onclick="location.href='@Url.Action("Index")'">Show All Contacts</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .letter-round {
+        border-radius: 5px;
+        margin: 2px;
+        height: 30px;
+        line-height: 1;
+        padding: 0.2rem 0.4rem;
+    }
+</style>
+
+<script>
+    var letters = document.querySelectorAll('.letter-round');
+    letters.forEach(function (letter) {
+        letter.addEventListener('click', function () {
+            var targetId = this.getAttribute('data-letter');
+            var targetPanel = document.getElementById(targetId);
+
+            if (targetPanel) {
+                document.querySelectorAll('.panel').forEach(function (panel) {
+                    panel.style.display = 'none';
+                });
+
+                targetPanel.style.display = (targetPanel.style.display === 'none' || targetPanel.style.display === '') ? 'block' : 'none';
+            }
+        });
+    });
+</script>

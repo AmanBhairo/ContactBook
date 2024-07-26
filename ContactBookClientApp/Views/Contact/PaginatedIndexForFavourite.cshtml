@@ -1,0 +1,136 @@
+﻿@model List<ContactViewModel>
+@{
+    // Generate links for each alphabet letter
+    var alphabet = ViewBag.FirstLetters; // Retrieve first letters from ViewBag
+}
+<h1>Favourite Contacts</h1>
+<form method="get">
+    @foreach (char letter in alphabet)
+    {
+        <button class="btn btn-outline-primary btn-sm letter-round" type="submit" name="letter" data-letter="@letter" value="@letter">@letter</button>
+    }
+
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Sr No.</th>
+            <th>Contact Name</th>
+
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="3">No record</td>
+            </tr>
+        }
+        else
+        {
+            var count = 0;
+            @foreach (var contact in Model)
+            {
+                count++;
+                var sr = (((ViewBag.CurrentPage) - 1) * (ViewBag.PageSize) + count);
+                <tr>
+                    <td>@sr</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@contact.ContactId">@contact.FirstName @contact.LastName</a>
+                    </td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-default" onclick="location.href='@Url.Action("Edit", new { id = contact.ContactId })'">Edit</button>
+                        }
+                        <button class="btn btn-default" onclick="location.href='@Url.Action("Details", new { id = contact.ContactId })'">Details</button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-danger" onclick="location.href='@Url.Action("Delete", new { id = contact.ContactId })'">Delete</button>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <button class="btn btn-primary pull-right" onclick="location.href='@Url.Action("Create")'">Add</button>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary" onclick="location.href='@Url.Action("PaginatedIndex")'">Back to Contacts</button>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary" onclick="location.href='@Url.Action("PaginatedIndexForFavourite")'">Show All</button>
+    </div>
+</div>
+
+
+<!-- Pagination -->
+<div>
+    @if (Model.Count == 0)
+    { }
+    else
+    {
+        <!-- Page size dropdown -->
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" onchange="changePageSize(this)">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <!-- Add more options as needed -->
+        </select>
+    }
+
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                <a class="page-link" href="/Contact/PaginatedIndexForFavourite?page=@i&pageSize=@ViewBag.PageSize&letter=@ViewBag.Letter">@i</a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<style>
+    .letter {
+        cursor: pointer;
+    }
+
+    <style >
+    .letter-round {
+        border-radius: 5px;
+        margin: 2px;
+        height: 30px;
+        line-height: 1;
+        padding: 0.2rem 0.4rem;
+    }
+</style>
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentPageSize = @(ViewBag.PageSize); // Get current page size from ViewBag
+        var pageSizeDropdown = document.getElementById("pageSize");
+        // Set selected option based on current page size
+        for (var i = 0; i < pageSizeDropdown.options.length; i++) {
+            if (pageSizeDropdown.options[i].value === currentPageSize.toString()) {
+                pageSizeDropdown.selectedIndex = i;
+                break;
+            }
+        }
+    });
+    function changePageSize(select) {
+        var pageSize = select.value;
+        var currentPage = @(ViewBag.CurrentPage);
+        var letter = "@ViewBag.Letter";
+        window.location.href = "/Contact/PaginatedIndex?page=" + currentPage + "&pageSize=" + pageSize + "&letter=" + letter;
+    }
+</script>

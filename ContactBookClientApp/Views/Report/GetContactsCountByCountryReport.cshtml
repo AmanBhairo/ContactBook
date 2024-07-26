@@ -1,0 +1,58 @@
+﻿@model ContactRecordReportViewModel
+@{
+    var country = ViewBag.Country as List<CountryViewModel>; ;
+    var TotalCount = ViewBag.Response;
+}
+<form asp-action="GetContactsCountByCountryReport" method="post">
+
+    <div class="card mb-3" id="montly">
+        <partial name="_ReportView" />
+
+        <div class="card-body btn-light">
+            <h1 class="card-title">Birthday Month Based Report</h1>
+
+            <select id="countrySelect" name="CountryId" onchange="submitFormOnChange(this)">
+                <option value="">---Select Month----</option>
+                @for (int i = 0; i < country.Count; i++)
+                {
+                    <option value="@(i+1)">@country[i].CountryName</option>
+                }
+            </select>
+            <div id="countryErrorMessage" style="display: none; color: red;">*Please select a Country.</div>
+
+            <div>
+                <h3>Total contcts:</h3>
+                <h5>@TotalCount</h5>
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var countrySelect = document.getElementById('countrySelect');
+        var selectedCountryId = '@ViewBag.CountryId'; // Ensure this renders correctly as a string in JavaScript
+
+        if (selectedCountryId) {
+            for (var i = 0; i < countrySelect.options.length; i++) {
+                if (countrySelect.options[i].value === selectedCountryId) {
+                    countrySelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    });
+
+    function submitFormOnChange(select) {
+        var selectedCountry = select.value;
+        if (selectedCountry != "") {
+            $('#countryErrorMessage').hide();
+            select.closest('form').submit();
+        }
+        else {
+            $('#countryErrorMessage').Show();
+        }
+    }
+</script>

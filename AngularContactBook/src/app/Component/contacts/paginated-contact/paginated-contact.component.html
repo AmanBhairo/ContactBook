@@ -1,0 +1,86 @@
+<h1>Contacts</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <button 
+                type="button" class="btn btn-outline-primary btn-sm letter-round" id="letter" name="letter" data-letter="item" *ngFor="let item of Alphabets" 
+                [class.btn-primary]="activeLetter === item" [style.background-color]="activeLetter === item ? '#cfe2f3' : 'transparent'" 
+                (click)="setActiveLetter(item)"(click)="filterByLetter(item)">
+                {{item}}
+            </button>
+            <button 
+                type="button" class="btn btn-outline-primary btn-sm letter-round" id="showAll" name="showAll" data-letter="showAll" 
+                [class.btn-primary]="activeLetter === 'showAll'" [style.background-color]="activeLetter === 'showAll' ? '#cfe2f3' : 'transparent'" 
+                (click)="setActiveLetter('showAll')"(click)="ShowAllContacts()">
+                Show All
+            </button>
+        </div>
+        <div class="d-flex justify-content-between" >
+            <button type="button" class="btn btn-outline-primary btn-sm letter-round" id="ascButton" name="sortingOrder" [ngClass]="{'btn-primary': sortingOrder === 'asc'}" (click)="SortContacts('asc')">Sort Asc</button>
+            <button type="button" class="btn btn-outline-primary btn-sm letter-round" id="descButton" name="sortingOrder" [ngClass]="{'btn-primary': sortingOrder === 'desc'}" (click)="SortContacts('desc')">Sort Desc</button>
+
+            <button class="btn btn-outline-info rounded-pill btn-sm" (click)="favouriteContacts()">Favourites</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" id="all">
+                <div *ngIf="loading">
+                    <img src="assets/loaderImage.gif" alt="Loading...">
+                </div>
+                <table class="table table-striped" *ngIf="!loading">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Profile Pic</th>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="totalItems!=0 && contacts && contacts.length > 0; else noContacts">
+                        
+                        <tr *ngFor="let contact of contacts; let counter = index" >
+                            <td>{{counter + 1}}</td>
+                            <td class="avatar">
+                                <img *ngIf="contact.imageByte" class="contact-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image">
+                                <img *ngIf="!contact.profilePic" class="contact-image" [src]="imageSrc" alt="Contact Image">
+                            </td>
+                            <td>{{contact.firstName}} {{contact.lastName}}</td>
+                            <td>{{contact.contactNumber}}</td>
+                            <td>
+                                <button class="btn btn-outline-primary rounded-pill btn-sm mx-2" (click)="updateCategory(contact.contactId)">✏️ Edit</button>
+                                <button class="btn btn-outline-info rounded-pill btn-sm mx-2" (click)="displayContact(contact.contactId)">Details</button>
+                                <button class="btn btn-outline-danger rounded-pill btn-sm mx-2" (click)="confirmDelet(contact.contactId)">🗑️ Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <ng-template #noContacts>
+                        <tr colspan="3">
+                            <td>No contacts Found!</td>
+                        </tr>
+                    </ng-template>
+                </table>
+                <a [routerLink]="['/addContact']" routerLinkActive="router-link-active">Add</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="totalItems!=0 && contacts && contacts.length > 0">
+    <label for="pageSize" >Page Size:</label>
+
+    <select id="pageSize" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+        <option [ngValue]="2">2</option>
+        <option [ngValue]="4">4</option>
+        <option [ngValue]="6">6</option>
+    </select>
+
+    <ul class="pagination">
+        <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item"
+            [class.active]="pageNumber === index + 1">
+            <a class="page-link" (click)="changePage(index + 1)">{{ index + 1 }}</a>
+        </li>
+    </ul>
+</div>

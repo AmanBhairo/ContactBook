@@ -1,0 +1,58 @@
+﻿
+
+@model ContactRecordReportViewModel
+@{
+    var TotalCount = ViewBag.Response;
+    var selectedGender = ViewBag.SelectedGender as string;
+}
+
+<form asp-action="GetContactCountByGenderReport" method="post">
+
+    <div class="card mb-3" id="monthly">
+        <div class="card-body btn-light">
+            <partial name="_ReportView" />
+
+            <h1 class="card-title">Gender Based Report</h1>
+
+            <select id="genderSelect" name="gender" onchange="submitFormOnChange(this)">
+                <option value="">---Select Gender----</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <div id="genderErrorMessage" style="display: none; color: red;">*Please select a Gender.</div>
+
+            <div>
+                <h3>Total contacts:</h3>
+                <h5>@TotalCount</h5>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    // Set the selected option based on ViewBag.SelectedGender
+    document.addEventListener('DOMContentLoaded', function () {
+        var genderSelect = document.getElementById('genderSelect');
+        var selectedGender = '@selectedGender'; // Ensure this renders correctly as a string in JavaScript
+
+        if (selectedGender) {
+            for (var i = 0; i < genderSelect.options.length; i++) {
+                if (genderSelect.options[i].value === selectedGender) {
+                    genderSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    });
+
+    function submitFormOnChange(select) {
+        var selectedCountry = select.value;
+        if (selectedCountry != "") {
+            $('#genderErrorMessage').hide();
+            select.closest('form').submit();
+        } else {
+            $('#genderErrorMessage').show();
+        }
+    }
+</script>

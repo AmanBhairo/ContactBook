@@ -1,0 +1,108 @@
+﻿@model List<ContactRecordReportViewModel>;
+@{
+    var month = ViewBag.Months;
+}
+<form asp-action="ContactRecordBasedOnBirthdayMonthReport" method="post">
+    <partial name="_ReportView" />
+    <h1 class="card-title">Birthday Month Based Report</h1>
+    <select id="monthSelect" name="month" onchange="submitFormOnChange(this)">
+        <option value="">---Select Month----</option>
+        @for (int i = 0; i < 12; i++)
+        {
+            <option value="@(i+1)">@month[i]</option>
+        }
+    </select>
+    <div id="monthErrorMessage" style="display: none; color: red;">*Please select a month.</div>
+</form>
+@if(Model != null)
+{
+    @if (Model.Count == 0)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Contact Name</th>
+                    <th>Contact Number</th>
+                    <th>Email</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>BirthDate</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="8">No record</td>
+                </tr>
+            </tbody>
+        </table>
+
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Contact Name</th>
+                    <th>Contact Number</th>
+                    <th>Email</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>BirthDate</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int sr = 0;
+                }
+
+                @foreach (var contact in Model)
+                {
+                    sr++;
+                <td>@sr</td>
+                <td>@contact.FirstName @contact.LastName</td>
+                <td>@contact.ContactNumber</td>
+                <td>@contact.Email</td>
+                <td>@contact.CountryName</td>
+                <td>@contact.StateName</td>
+                <td>@contact.BirthDate</td>
+
+
+
+                }
+            </tbody>
+        </table>
+
+    }
+}
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var monthSelect = document.getElementById('monthSelect');
+        var selectedMonth = '@ViewBag.Month'; // Ensure this renders correctly as a string in JavaScript
+
+        if (selectedMonth) {
+            for (var i = 0; i < monthSelect.options.length; i++) {
+                if (monthSelect.options[i].value === selectedMonth) {
+                    monthSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+    });
+
+    function submitFormOnChange(select) {
+        var selectedMonth = select.value;
+        if (selectedMonth != "") {
+            $('#monthErrorMessage').hide();
+            select.closest('form').submit();
+        }
+        else{
+            $('#monthErrorMessage').Show();
+        }
+    }
+</script>

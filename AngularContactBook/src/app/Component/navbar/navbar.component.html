@@ -1,0 +1,75 @@
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" [routerLink]="['/home']" routerLinkActive="router-link-active" >Contact Book</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" [routerLink]="['/home']" routerLinkActive="router-link-active" >Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" [routerLink]="['/privacy']" routerLinkActive="router-link-active" >Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" [routerLink]="['/contact']" routerLinkActive="router-link-active" >Contact</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                      <a class="nav-link text-dark" [routerLink]="['/paginatedContact']" routerLinkActive="router-link-active" >Paginated Contact</a>
+                  </li> -->
+                  <li class="nav-item">
+                      <a class="nav-link text-dark" [routerLink]="['/searchContact']" routerLinkActive="router-link-active" >Search Contact</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" [routerLink]="['/filteredContact']" routerLinkActive="router-link-active" >Filtered Contact</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-dark" [routerLink]="['/reportdeicder']" routerLinkActive="router-link-active" >Report</a>
+                </li>
+                </ul>
+                <ul class="nav navbar-nav ml-auto" *ngIf="!isAuthenticated">
+                  <li class="nav-item">
+                      <a class="nav-link" [routerLink]="['/signup']" routerLinkActive="router-link-active" ><span class="fas fa-user"> Sign Up</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" [routerLink]="['/signin']" routerLinkActive="router-link-active" ><span class="fas fa-sign-in-alt"> Sign In</span></a>
+                  </li>
+                  <!-- <li class="nav-item">
+                      <a class="nav-link" [routerLink]="['/forgotpassword']" routerLinkActive="router-link-active" ><span class="fas fa-sign-in-alt"> Forgot Password</span></a>
+                  </li> -->
+              </ul>
+              <ul class="nav navbar-nav ml-auto" *ngIf="isAuthenticated">
+                  <!-- <li class="nav-item">
+                      <a class="nav-link" [routerLink]="['/profile']" routerLinkActive="router-link-active" ><span class="fas fa-user"> {{userName}}</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" (click)="signOut()" [routerLink]="['/signin']" style="cursor: pointer;" routerLinkActive="router-link-active" ><span class="fas fa-sign-in-alt"> SignOut</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" [routerLink]="['/changepassword']" routerLinkActive="router-link-active" ><span class="fas fa-user">Change password</span></a>
+                  </li> -->
+                  <div class="row">
+                      <div class="col">
+                          <div ngbDropdown display="dynamic" class="d-inline-block">
+                              <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>
+                                  <img *ngIf="imageByte" class="rounded-circle mr-2" [src]="'data:image/jpeg;base64,' + imageByte" alt="User profile Image" style="width: 30px; height: 30px;">
+                                  <img *ngIf="!imageByte" class="rounded-circle mr-2" [src]="imageSrc" alt="Default user profile Image" style="width: 30px; height: 30px;">
+                                  {{userName}}
+                              </button>
+                              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" placement="bottom-left" class="dropdown-menu">
+                                  <button ngbDropdownItem class="dropdown-item" [routerLink]="['/userdetail']" routerLinkActive="router-link-active">Profile</button>
+                                  <button ngbDropdownItem class="dropdown-item" (click)="signOut()" [routerLink]="['/signin']" style="cursor: pointer;" routerLinkActive="router-link-active">Sign Out</button>
+                                  <button ngbDropdownItem class="dropdown-item" [routerLink]="['/changepassword']" routerLinkActive="router-link-active">Change Password</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                                              
+              </ul>
+            </div>
+        </div>
+    </nav>
+  </header>

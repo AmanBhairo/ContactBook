@@ -1,0 +1,48 @@
+
+<div class="form-group rounded-corner" >
+    <label for="monthSelect"><b>Select Month:</b></label>
+    <select id="monthSelect" class="form-control" [(ngModel)]="birthdayMonth" (change)="onMonthChange()">
+      <option *ngFor="let month of monthList" [ngValue]="month.value">{{ month.name }}</option>
+    </select>
+    <div *ngIf="!birthdayMonth">
+      Please select a month to view monthly salary data.
+    </div>
+  </div>
+
+<div class="card mb-3">
+    <div class="rounded-corner salary-data" *ngIf=" birthdayMonthBasedReport.length !=0 && birthdayMonth!=0 else noData">
+
+        <div class="rounded-corner salary-data" *ngIf="birthdayMonthBasedReport; else noData" id="salarySlipTable">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Contact Name</th>
+                        <th>Contact Number</th>
+                        <th>Email</th>
+                        <th>Country</th>
+                        <th>State</th>
+                        <th>BirthDate</th>
+                    </tr>
+                </thead>
+            <tbody class="table-group-divider">
+                <tr *ngFor="let contact of birthdayMonthBasedReport; let counter = index" >
+                    <td>{{counter + 1}}</td>
+                    <td>{{contact.firstName}} {{contact.lastName}}</td>
+                    <td>{{contact.contactNumber}}</td>
+                    <td>{{contact.email}}</td>
+                    <td>{{contact.countryName}}</td>
+                    <td>{{contact.stateName}}</td>
+                    <td>{{contact.birthDate}}</td>
+                </tr>
+            </tbody>
+          </table>
+        
+      </div>
+</div>
+
+<ng-template #noData>
+    <div class="rounded-corner no-data">
+      <p>No data available for the selected year.</p>
+    </div>
+  </ng-template>

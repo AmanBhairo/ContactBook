@@ -1,0 +1,109 @@
+﻿<div class="container">
+    <div class="card mt-5 animated fadeIn">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Contact Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="contact-details">
+                        <div class="contact-info">
+                            <h4>Name:</h4>
+                            <p>@Model.FirstName @Model.LastName</p>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Contact Number:</h4>
+                            <p>@Model.ContactNumber</p>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Email:</h4>
+                            <p>@Model.Email</p>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Contact Description:</h4>
+                            <p>@Model.ContactDescription</p>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Gender:</h4>
+                            <p>@(Model.Gender == "M" ? "Male" : "Female") @Html.Raw(Model.Gender == "M" ? "🚹" : "🚺")</p>
+                        </div>
+                        <div class="contact-info">
+                            <h4>Address:</h4>
+                            <p>@Model.Address, @Model.state.StateName, @Model.country.CountryName</p>
+                        </div>
+                        @if (Model.BirthDate != null)
+                        {
+                            <div class="contact-info">
+                                <h4>Date of Birth:</h4>
+                                <p>@Model.BirthDate.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-image">
+                        <h4>📸 Image:</h4>
+                        <div class="image-container">
+                            <img class="rounded-circle img-thumbnail" src="@Url.Content("~/Uploads/"+ViewBag.FileName)" alt="image" />
+                        </div>
+                        @if (Model.Favourite)
+                        {
+                            <div class="contact-info">
+                                <h4>Favourite ⭐</h4>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="buttons">
+                <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@Model.ContactId">✏️ Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.ContactId">🗑️ Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contact-info {
+        margin-bottom: 15px;
+    }
+
+        .contact-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+    .contact-image {
+        margin-top: 20px;
+    }
+
+    .buttons a {
+        margin-right: 10px;
+    }
+
+    .card-header h2 {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: none;
+    }
+
+    .image-container {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .img-thumbnail {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        position: relative;
+        z-index: 1;
+    }
+</style>

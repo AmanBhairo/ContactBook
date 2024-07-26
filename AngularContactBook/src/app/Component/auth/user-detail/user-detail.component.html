@@ -1,0 +1,19 @@
+<div class="profile-card">
+    <div class="content">
+      <div class="header">
+        <div class="avatar">
+          <img *ngIf="user.imageByte" class="avatar-image" [src]="'data:image/jpeg;base64,' + user.imageByte" alt="Profile Image">
+          <img *ngIf="!user.imageByte" class="avatar-image" src="default-avatar.png" alt="Default Profile Image">
+        </div>
+        <div class="user-info">
+          <h2>{{user.firstName}} {{user.lastName}}</h2>
+          <p class="email">{{user.email}}</p>
+          <p class="contact-number">{{user.contactNumber}}</p>
+        </div>
+        <button class="edit-button" (click)="updateUser(user.userId)">Edit Profile</button>
+      </div>
+      <div class="details">
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,68 @@
+<!-- <div class="container">
+    <h2>Sign In</h2>
+    <div class="position-relative">
+        <div *ngIf="loading" class="loader-overlay">
+            <img src="assets/loaderImage.gif" class="loader-overlay" alt="loading" />
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form (ngSubmit)="login()" #loginForm="ngForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" [(ngModel)]="username"
+                            required #usernameInput="ngModel">
+                        <div *ngIf="usernameInput.touched && usernameInput.errors?.['required']" class="text-danger">
+                            Username is
+                            required.</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password"
+                            required #passwordInput="ngModel">
+                        <div *ngIf="passwordInput.touched && passwordInput.errors?.['required']" class="text-danger">
+                            Password is
+                            required.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div *ngIf="loading" class="loader-overlay">
+            <img src="assets/loaderImage.gif" class="loader-overlay" alt="loading" />
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Login</h2>
+                    <form (ngSubmit)="login()" #loginForm="ngForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" [(ngModel)]="username" required #usernameInput="ngModel">
+                            <div *ngIf="usernameInput.touched && usernameInput.errors?.['required']" class="text-danger">
+                                Username is required.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" [(ngModel)]="password" required #passwordInput="ngModel">
+                            <div *ngIf="passwordInput.touched && passwordInput.errors?.['required']" class="text-danger">
+                                Password is required.
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.valid">Login</button>
+                    </form>
+                    <div class="dropdown-divider"></div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-link" [routerLink]="['/signup']" routerLinkActive="router-link-active">New around here? Sign up</button>
+                        <button type="button" class="btn btn-link" [routerLink]="['/forgotpassword']" routerLinkActive="router-link-active">Forgot password?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

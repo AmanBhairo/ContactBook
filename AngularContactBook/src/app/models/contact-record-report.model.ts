@@ -1,0 +1,16 @@
+export interface ContactReport{
+    contactId: number,
+    firstName: string,
+    countryName: string,
+    stateName: string,
+    lastName: string,
+    contactNumber: string,
+    email: string,
+    contactDescription: string,
+    profilePic: string,
+    gender: string,
+    address: string,
+    favourite: boolean,
+    birthDate: string|null,
+    imageByte: string,
+  }

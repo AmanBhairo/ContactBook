@@ -1,0 +1,69 @@
+<div class="container">
+    <h2 class="text-center">State Based Report</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label class="form-label" for="countryId">Country Name:</label>
+                <select id="countryId" name="countryId" class="form-control" [(ngModel)]="countryId" (change)="onCountryChange()" required>
+                    <option value="">Select your country</option>
+                    <option *ngFor="let country of countries" [ngValue]="country.countryId">{{country.countryName}}</option>
+                </select>
+                <div *ngIf="countryId==0">
+                    <small class="text-danger">Country is required.</small>
+                </div>
+            </div>
+            <div class="mb-3" *ngIf="countryId!=0">
+                <label class="form-label" for="stateId">State Name:</label>
+                <select id="stateId" name="stateId" class="form-control" [(ngModel)]="stateId" required (change)="onMonthChange()">
+                    <option value="">Select your state</option>
+                    <option *ngFor="let state of states" [ngValue]="state.stateId">{{state.stateName}}</option>
+                </select>
+                <div *ngIf="stateId==0">
+                    <small class="text-danger">State is required.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mb-3">
+        <div class="rounded-corner salary-data" *ngIf=" stateBasedReport.length !=0 || stateId!=0 else noData">
+    
+            <div class="rounded-corner salary-data" *ngIf="stateBasedReport; else noData" id="salarySlipTable">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Contact Name</th>
+                            <th>Contact Number</th>
+                            <th>Email</th>
+                            <th>Country</th>
+                            <th>State</th>
+                            <th>BirthDate</th>
+                        </tr>
+                    </thead>
+                <tbody class="table-group-divider">
+                    <tr *ngFor="let contact of stateBasedReport; let counter = index" >
+                        <td>{{counter + 1}}</td>
+                        <td>{{contact.firstName}} {{contact.lastName}}</td>
+                        <td>{{contact.contactNumber}}</td>
+                        <td>{{contact.email}}</td>
+                        <td>{{contact.countryName}}</td>
+                        <td>{{contact.stateName}}</td>
+                        <td>{{contact.birthDate}}</td>
+                    </tr>
+                </tbody>
+              </table>
+              
+             
+          
+          </div>
+    </div>
+    
+    <ng-template #noData>
+        <div class="rounded-corner no-data">
+          <p>No data available for the selected state.</p>
+        </div>
+      </ng-template>
+</div>
+            

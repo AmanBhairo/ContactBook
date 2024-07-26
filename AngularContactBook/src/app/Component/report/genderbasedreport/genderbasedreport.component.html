@@ -1,0 +1,21 @@
+<div class="rounded-corner salary-data" >
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Male Total Count</th>
+                <th>Female Total Count</th>
+            </tr>
+        </thead>
+    <tbody class="table-group-divider">
+        <td *ngIf="maleBasedReport!=0">{{maleBasedReport}}</td>
+        <td *ngIf="maleBasedReport==0">0</td>
+        
+        <td *ngIf="femaleBasedReport!=0">{{femaleBasedReport}}</td>
+        <td *ngIf="femaleBasedReport==0">0</td>
+        
+    </tbody>
+  </table>
+  
+ 
+
+</div>

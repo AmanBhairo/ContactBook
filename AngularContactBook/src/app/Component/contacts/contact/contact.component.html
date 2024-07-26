@@ -1,0 +1,54 @@
+<h1>Contacts</h1>
+
+<div class="container">
+    <!-- <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-primary btn-sm letter-round" data-letter="A">A</button>
+                <button type="button" class="btn btn-outline-primary btn-sm letter-round" data-letter="B">B</button>
+                <button type="button" class="btn btn-outline-primary btn-sm letter-round" data-letter="C">C</button>
+                <button type="button" class="btn btn-outline-primary btn-sm letter-round" data-letter="D">D</button>
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" id="all">
+                <div *ngIf="loading">
+                    <img src="assets/loaderImage.gif" alt="Loading...">
+                </div>
+                <table class="table table-striped" *ngIf="!loading">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Profile Pic</th>
+                            <th>Name</th>
+                            <th>Number</th>
+                            <th class="ml-100">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contact of contacts; let counter = index" >
+                            <td>{{counter + 1}}</td>
+                            <td class="avatar">
+                                <img *ngIf="contact.imageByte" class="contact-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image">
+                                <img *ngIf="!contact.profilePic" class="contact-image" [src]="imageSrc" alt="Contact Image">
+                            </td>
+                            <td>{{contact.firstName}} {{contact.lastName}}</td>
+                            <td>{{contact.contactNumber}}</td>
+                            <td>
+                                <button class="btn btn-outline-primary rounded-pill btn-sm mx-2" (click)="updateCategory(contact.contactId)">✏️ Edit</button>
+                                <button class="btn btn-outline-info rounded-pill btn-sm mx-2" (click)="displayContact(contact.contactId)">Details</button>
+                                <button class="btn btn-outline-danger rounded-pill btn-sm mx-2" (click)="confirmDelet(contact.contactId)">🗑️ Delete</button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="!loading && !contacts ">
+                            <td colspan="3">No record found</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a [routerLink]="['/addContact']" routerLinkActive="router-link-active">Add</a>
+            </div>
+        </div>
+    </div>
+</div>

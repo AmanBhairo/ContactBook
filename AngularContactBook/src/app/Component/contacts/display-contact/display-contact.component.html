@@ -1,0 +1,29 @@
+<div class="contact-card">
+  <div class="content">
+    <div class="header">
+      <h2>{{contact.firstName}} {{contact.lastName}}</h2>
+      <div class="avatar">
+        <img *ngIf="contact.imageByte" class="contact-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image">
+        <img *ngIf="!contact.profilePic" class="contact-image" [src]="imageSrc" alt="Contact Image">
+      </div>
+    </div>
+    <div class="details">
+      <div class="detail-row">
+        <p><strong>Email:</strong> {{contact.email}}</p>
+        <p><strong>Contact Number:</strong> {{contact.contactNumber}}</p>
+      </div>
+      <div class="detail-row">
+        <p><strong>Address:</strong> {{contact.address}}</p>
+      </div>
+      <div class="detail-row">
+        <p><strong>Country:</strong> {{contact.country.countryName}}</p>
+        <p><strong>State:</strong> {{contact.state.stateName}}</p>
+      </div>
+      <div class="detail-row">
+        <p *ngIf="contact.gender=='M'"><strong>Gender:</strong> Male</p>
+        <p *ngIf="contact.gender=='F'"><strong>Gender:</strong> Female</p>
+        <p *ngIf="contact.favourite==true"><strong>Favourite ⭐</strong></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@model UpdateUserViewModel
+<h1>Update User</h1>
+<h1>Update</h1>
+<form asp-action="UpdateUser" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="LoginId" />
+    <input type="hidden" asp-for="Email" />
+    <input type="hidden" asp-for="userId" />
+    <input type="hidden" asp-for="ProfilePic" />
+    <input type="hidden" asp-for="ImageByte" />
+
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ContactNumber" class="control-label"></label>
+        <input asp-for="ContactNumber" class="form-control" />
+        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="File" class="control-label">Profile Picture</label>
+        @if (!string.IsNullOrEmpty(Model.ProfilePic))
+        {
+            <div class="mb-3">
+                <img src="" alt="" id="imagePreview" style="width: 100px; height: 100px; display: none;" />
+                <img src="@Url.Content("~/Uploads/" + Model.ProfilePic)" alt="Profile Picture" class="img-thumbnail" style="max-width: 200px;" />
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage">
+                <label class="form-check-label" for="removeImage">Remove current picture</label>
+                <input type="hidden" id="removeImageHidden" name="removeImageHidden" />
+            </div>
+        }
+        <div class="custom-file">
+            <label asp-for="File" class="control-label"></label>
+            <input asp-for="File" type="file" class="form-control" id="fileInput" />
+            <span class="text-danger file-validation-error"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        // Client-side file type validation
+        $('form').submit(function (event) {
+            // Get the selected file
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            // Check if a file is selected
+            if (file) {
+                // Get the file extension
+                var fileExtension = file.name.split('.').pop().toLowerCase();
+                // Allowed file extensions
+                var allowedExtensions = ['jpg', 'jpeg', 'png'];
+                // Check if the file extension is allowed
+                if (allowedExtensions.indexOf(fileExtension) === -1) {
+                    // Prevent form submission
+                    event.preventDefault();
+                    // Show validation error message
+                    $('.file-validation-error').text('Only .jpg, .jpeg, and .png files are allowed.');
+                }
+            }
+        });
+
+
+        $('#removeImage').change(function () {
+
+            if ($(this).is(':checked')) {
+                $('#removeImageHidden').val('true');
+            } else {
+                $('#removeImageHidden').val('false');
+            }
+        });
+    });
+</script>
